@@ -97,11 +97,11 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
         const val ACTION_NOTIFY_KILL_PROCESS = "tts.notification.exit"
         const val NOTIFICATION_CHAN_ID = "system_tts_service"
 
-        const val DEFAULT_VOICE_NAME = "DEFAULT_默认"
+        const val DEFAULT_VOICE_NAME = "DEFAULT_\u9ed8\u8ba4"
         const val PARAM_BGM_ENABLED = "bgm_enabled"
 
         /**
-         * 更新配置
+         * Update the config
          */
         fun notifyUpdateConfig(isOnlyReplacer: Boolean = false) {
             if (isOnlyReplacer)
@@ -124,13 +124,13 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
     private lateinit var mScope: CoroutineScope
 
 
-    // WIFI 锁
+    // WIFI lock
     private val mWifiLock by lazy {
         val wm = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
         wm.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "tts-server:wifi_lock")
     }
 
-    // 唤醒锁
+    // Wake lock
     private var mWakeLock: PowerManager.WakeLock? = null
 
     override fun onCreate() {
@@ -421,10 +421,10 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
 
     private var mNotificationBuilder: Notification.Builder? = null
 
-    // 通知是否显示中
+    // Whether the notification is showing
     private var mNotificationDisplayed = false
 
-    /* 启动前台服务通知 */
+    /* Start the foreground service notification */
     private fun startForegroundService() {
         if (SysTtsConfig.isForegroundServiceEnabled && !mNotificationDisplayed) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -445,7 +445,7 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
         }
     }
 
-    /* 更新通知 */
+    /* Update the notification */
     private fun updateNotification(title: String, content: String? = null) {
         if (SysTtsConfig.isForegroundServiceEnabled)
             runOnUI {
@@ -466,17 +466,17 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
             }
     }
 
-    /* 获取通知 */
+    /* Get the notification */
     @Suppress("DEPRECATION")
     private fun getNotification(): Notification {
         val notification: Notification
-        /*Android 12(S)+ 必须指定PendingIntent.FLAG_*/
+        /*Android 12 (S)+ must set PendingIntent.FLAG_*/
         val pendingIntentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_IMMUTABLE
         } else {
             0
         }
-        /*点击通知跳转*/
+        /*Open the app when the notification is tapped*/
         val pendingIntent =
             PendingIntent.getActivity(
                 this, 1, Intent(
@@ -517,15 +517,15 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
     inner class NotificationReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
-                ACTION_NOTIFY_KILL_PROCESS -> { // 通知按钮{结束进程}
+                ACTION_NOTIFY_KILL_PROCESS -> { // Notification button: end process
                     stopForeground(true)
                     exitProcess(0)
                 }
 
-                ACTION_NOTIFY_CANCEL -> { // 通知按钮{取消}
+                ACTION_NOTIFY_CANCEL -> { // Notification button: cancel
                     if (mTtsManager!!.isSynthesizing)
-                        onStop() /* 取消当前播放 */
-                    else /* 无播放，关闭通知 */ {
+                        onStop() /* Cancel the current playback */
+                    else /* Nothing is playing; dismiss the notification */ {
                         stopForeground(true)
                         mNotificationDisplayed = false
                     }
@@ -547,7 +547,7 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
     private fun logI(msg: String) = logger.info(msg)
     private fun logW(msg: String) = logger.warn(msg)
     private fun logE(msg: String, throwable: Throwable? = null) {
-        updateNotification("⚠️ " + getString(R.string.error), msg)
+        updateNotification("Warning: " + getString(R.string.error), msg)
         Log.e(TAG, msg, throwable)
 
         logger.error(msg)

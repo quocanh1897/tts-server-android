@@ -1,9 +1,9 @@
 let SpeechRuleJS = {
-    name: "旁白/对话",
+    name: "Narration/Dialogue",
     id: "ttsrv.multi_voice",
     author: "TTS Server",
     version: 4,
-    tags: {narration: "旁白", dialogue: "对话"},
+    tags: {narration: "Narration", dialogue: "Dialogue"},
 
     handleText(text) {
         const list = [];
@@ -13,11 +13,11 @@ let SpeechRuleJS = {
         text.split("").forEach((char, index) => {
             tmpStr += char;
 
-            if (char === '“') {
+            if (char === '\u201c') {
                 endTag = "dialogue";
                 list.push({text: tmpStr, tag: "narration"});
                 tmpStr = "";
-            } else if (char === '”') {
+            } else if (char === '\u201d') {
                 endTag = "narration";
                 tmpStr = tmpStr.slice(0, -1)
                 list.push({text: tmpStr, tag: "dialogue"});
@@ -31,7 +31,7 @@ let SpeechRuleJS = {
     },
 
     splitText(text) {
-        let separatorStr = "。？?！!;；"
+        let separatorStr = "\u3002\uFF1F?\uFF01!;\uFF1B"
 
         let list = []
         let tmpStr = ""
@@ -46,7 +46,7 @@ let SpeechRuleJS = {
             }
         })
 
-        return list.filter(item =>  item.replace(/[“”]/g, '').trim().length > 0);
+        return list.filter(item =>  item.replace(/[\u201c\u201d]/g, '').trim().length > 0);
     }
 
 };

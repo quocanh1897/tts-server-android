@@ -31,7 +31,7 @@ class DebugSystemTtsActivity : ComposeActivity() {
         super.onCreate(savedInstanceState)
 
         val initialText = """
-            “大哥。”二长老上前一步，“何必为这叛徒神伤？”
+            "Brother," the second elder said, stepping forward, "why grieve for this traitor?"
         """.trimIndent()
 
         setContent {
@@ -57,9 +57,9 @@ class DebugSystemTtsActivity : ComposeActivity() {
                         val syncLock = SyncLock()
                         val tts = TextToSpeech(this@DebugSystemTtsActivity, {
                             if (it == TextToSpeech.SUCCESS) {
-                                toast("初始化成功")
+                                toast("Initialization succeeded")
                             } else
-                                toast("初始化失败")
+                                toast("Initialization failed")
 
                             syncLock.cancel()
                         }, context.packageName)
@@ -83,7 +83,7 @@ class DebugSystemTtsActivity : ComposeActivity() {
                         tts.voices.forEach {
                             log += "voice: ${it.name}\n"
 
-                            if (it.name.startsWith("晓晓"))
+                            if (it.name.startsWith("\u6653\u6653"))
                                 tts.voice = it
                         }
                         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)

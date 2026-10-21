@@ -16,14 +16,14 @@ annotation class SpeechTarget {
     companion object {
         const val ALL = 0
 
-        @Deprecated("已有自定TAG")
-        const val ASIDE = 1 //旁白
+        @Deprecated("Custom tags already exist")
+        const val ASIDE = 1 // narration
 
-        @Deprecated("已有自定TAG")
-        const val DIALOGUE = 2 //对话
+        @Deprecated("Custom tags already exist")
+        const val DIALOGUE = 2 // dialogue
 
-        const val BGM = 3 //背景音乐
-        const val TAG = 4 // 自定义Tag
+        const val BGM = 3 // background music
+        const val TAG = 4 // custom tag
 
         fun toText(@SpeechTarget target: Int): String {
             return when (target) {

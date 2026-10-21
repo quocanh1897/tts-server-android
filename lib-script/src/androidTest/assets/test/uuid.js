@@ -19,7 +19,7 @@ const numbers = [
 const uuidBytes = new Uint8Array(numbers);
 
 // from UInt8Array
-let ret = UUID.stringify(uuidBytes); // ⇨ '6ec0bd7f-11c0-43da-975e-2a8ad9ebae0b'
+let ret = UUID.stringify(uuidBytes); // => '6ec0bd7f-11c0-43da-975e-2a8ad9ebae0b'
 println("stringify: " + ret)
 println("validate: " + UUID.validate(ret)) // true
 println("validate: ", UUID.validate(ret.replaceAll("-"))) // false

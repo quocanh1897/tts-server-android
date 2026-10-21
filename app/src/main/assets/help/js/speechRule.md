@@ -1,23 +1,23 @@
-# 朗读规则
-> 朗读规则用于将原始文本分段并标记tag，然后由TTS Server根据tag匹配配置进行语音合成。
+# Speech rules
+> Speech rules split the original text into segments and mark each one with a tag. TTS Server then matches a config by tag and synthesizes speech.
 
-## 软件内置的规则示例：
+## Built-in rule example:
 
-```javascript 
+```javascript
 let SpeechRuleJS = {
-    name: "旁白/对话",
+    name: "Narration/Dialogue",
     id: "ttsrv.multi_voice",
     author: "TTS Server",
     version: 4,
-    
-    // Map类型，key为标签id，value为标签下拉框中的显示名称
-    tags: {narration: "旁白", dialogue: "对话"},
 
-    // text 为原始的未经处理的文本
-    // 返回一个List：
+    // Map: the key is the tag id, the value is the label shown in the tag dropdown
+    tags: {narration: "Narration", dialogue: "Dialogue"},
+
+    // text is the original, unprocessed text
+    // Returns a List:
     // [
-    //     {text: "这是一段旁白文本", tag: "narration"}, 
-    //     {text: "这是一段对话文本", tag: "dialogue"}
+    //     {text: "This is narration", tag: "narration"},
+    //     {text: "This is dialogue", tag: "dialogue"}
     // ]
     handleText(text) {
         const list = [];
@@ -27,11 +27,11 @@ let SpeechRuleJS = {
         text.split("").forEach((char, index) => {
             tmpStr += char;
 
-            if (char === '“') {
+            if (char === '\u201c') {
                 endTag = "dialogue";
                 list.push({text: tmpStr, tag: "narration"});
                 tmpStr = "";
-            } else if (char === '”') {
+            } else if (char === '\u201d') {
                 endTag = "narration";
                 tmpStr = tmpStr.slice(0, -1)
                 list.push({text: tmpStr, tag: "dialogue"});
@@ -44,10 +44,10 @@ let SpeechRuleJS = {
         return list;
     },
 
-    // 调用完handleText后对其返回的list中每个元素text进行分句，
-    // 返回一个字符串List
+    // After handleText, split each returned element's text into sentences.
+    // Returns a list of strings.
     splitText(text) {
-        let separatorStr = "。？?！!;；"
+        let separatorStr = "\u3002\uFF1F?\uFF01!;\uFF1B"
 
         let list = []
         let tmpStr = ""
@@ -62,11 +62,10 @@ let SpeechRuleJS = {
             }
         })
 
-        return list.filter(item =>  item.replace(/[“”]/g, '').trim().length > 0);
+        return list.filter(item =>  item.replace(/[\u201c\u201d]/g, '').trim().length > 0);
     }
 
 };
 
 
 ```
-

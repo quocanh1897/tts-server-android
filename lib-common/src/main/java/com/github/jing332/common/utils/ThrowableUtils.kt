@@ -13,4 +13,4 @@ val Throwable.messageChain: String
     get() = ExceptionUtil.getThrowableList(this).joinToString("\n")
 
 val Throwable.readableString: String
-    get() = "${rootCause}\n⬇ More:\n${stackTraceToString()}"
+    get() = "${rootCause}\n-> More:\n${stackTraceToString()}"

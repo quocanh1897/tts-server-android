@@ -93,7 +93,7 @@ object ZipUtils {
 
 
     /**
-     * @param onProgress readCompressedSize 已经解压的压缩大小
+     * @param onProgress readCompressedSize is the compressed size already extracted
      */
     suspend fun unzipFile(
         zis: ZipInputStream,

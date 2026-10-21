@@ -107,7 +107,7 @@ class PluginLoginActivity : ComposeActivity() {
         when (start) {
             "cookies" -> {
                 val cookies = CookieManager.getInstance().getCookie(loginUrl)
-//                val cookies = webView.evaluateJavascript("document.cookie") // Deprecated; incomplete cookie.”
+//                val cookies = webView.evaluateJavascript("document.cookie") // Deprecated; incomplete cookie."
                 if (all) cookies else cookies.fromCookie()[end] ?: ""
             }
 

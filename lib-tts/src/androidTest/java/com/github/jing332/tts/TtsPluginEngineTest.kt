@@ -39,7 +39,7 @@ class TtsPluginEngineTest {
                     console.log(ttsrv.userVars)
                 },
                 
-                // 无 getAudio() 时调用
+                // Called when getAudio() is absent
                 'getAudioV2': function(request, callback){
                     console.log(request)    
                 },
@@ -64,7 +64,7 @@ class TtsPluginEngineTest {
             } 
 
             let EditorJS = {
-                //在编辑TTS界面保存时调用
+                // Called when saving on the TTS edit screen
                 'getAudioSampleRate': function(locale, voice) {
                     let audio = PluginJS.getAudio('test', locale, voice, 50, 50, 50)
                     let rate = ttsrv.getAudioSampleRate(audio)
@@ -83,7 +83,7 @@ class TtsPluginEngineTest {
                 'getVoices': function(locale) {
                     console.log(typeof locale)
                     if (locale == 'zh-CN') {
-                        return {'yanyan':'妍妍 [亲切甜美女声]','lulu':'璐璐 [轻快热情女声]','qiqi':'麒麒 [清新爽快女声]','nana':'娜娜 [轻柔恬淡女声]','xiaocheng':'晓诚 [似水如歌女声]','xiaoyao':'逍遥 [甜美灵动女声]','chenyu':'晨雨 [温和有礼女声]','lingfeng':'灵凤 [温婉动人女声]','ruirui':'瑞叡 [沉稳恬淡女声]','luyao':'露瑶 [婉转悠扬女声]','linglong':'玲珑 [轻快甜美女声]','yurou':'羽柔 [轻盈欢快女声]','siqi':'思绮 [宛转悠扬女声]','chenchen':'晨晨 [热情洋溢女声]','qiulian':'秋莲 [春风舒畅女声]','xintong':'馨彤 [清澈动听女声]','yiyi':'伊依 [清朗悦耳女声]','wenhui':'文慧 [珠圆玉润女声]','xiaoxiao':'筱筱 [可信亲切女声]','xiaofang':'小芳 [天真活泼女声]','xiaoai':'小艾 [真诚友善女声]','nainai':'奈奈 [纯真自然女声]','chengmiao':'承渺 [轻劲飒爽女声]','zhengcheng':'征程 [柔和坚定男声]','zili':'子黎 [清幽雅致男声]','ningning':'宁宁 [亲切温柔男声]','zhentian':'振天 [大方洒脱男声]','bufan':'步凡 [磁性淳厚男声]','wenxi':'文熙 [阳光自然男声]','tiantian':'天天 [沉稳浑厚男声]','lingyu':'凌宇 [温润如玉男声]','wusong':'梧松 [明朗严肃男声]','kunde':'坤德 [深沉稳重男声]','jinyan':'锦言 [清晰严谨男声]','shenzhi':'深秩 [紧张压迫男声]','ruyan':'儒严 [一本正经男声]','jianming':'剑鸣 [玄幻小说]','yuzhang':'御彰 [玄幻小说]','chuanqi':'传奇 [游戏小说]','lingmeng':'绫梦 [言情小说]','shenghun':'圣魂 [玄幻小说]','yizhou':'易周 [都市小说]','youlan':'幽蓝 [言情小说]','hongmang':'鸿芒 [玄幻小说]','youran':'悠然 [玄幻小说]','shanyu':'山雨 [玄幻小说]','mengjing':'梦静 [都市小说]','yunsong':'云颂 [玄幻小说]','haohan':'浩翰 [都市小说]','linger':'灵儿 [萝莉音色]','yaoyao':'妖妖 [正太音色]','subo':'苏博 [新闻男声]','mina':'米娜 [新闻女声]','linghui':'灵慧 [新闻女声]','lingyin':'灵隐 [新闻女声]','shuangshuang':'双双 [新闻男声]','jeff':'杰夫 [英文新闻]','rose':'萝丝 [英文小说]','julia':'茱莉亚 [英文小说]','jack':'杰克 [英文小说]','liangshu':'梁叔 [名人音色]','xiaosong':'小松 [名人音色]','laoyi':'老易 [名人音色]','dafei':'大飞 [名人音色]','shishen':'食神 [名人音色]','wansheng':'万圣 [名人音色]','kaige':'凯哥 [名人音色]','guobao':'国宝 [名人音色]','jiange':'健哥 [名人音色]'}
+                        return {'yanyan':'Yanyan [warm sweet female voice]','lulu':'Lulu [bright lively female voice]','qiqi':'Qiqi [fresh crisp female voice]','nana':'Nana [soft calm female voice]','xiaocheng':'Xiaocheng [flowing songlike female voice]','xiaoyao':'Xiaoyao [sweet lively female voice]','chenyu':'Chenyu [gentle polite female voice]','lingfeng':'Lingfeng [graceful female voice]','ruirui':'Ruirui [steady calm female voice]','luyao':'Luyao [melodious female voice]','linglong':'Linglong [light sweet female voice]','yurou':'Yurou [light cheerful female voice]','siqi':'Siqi [melodious female voice]','chenchen':'Chenchen [enthusiastic female voice]','qiulian':'Qiulian [breezy relaxed female voice]','xintong':'Xintong [clear pleasant female voice]','yiyi':'Yiyi [bright pleasant female voice]','wenhui':'Wenhui [smooth polished female voice]','xiaoxiao':'Xiaoxiao [trustworthy warm female voice]','xiaofang':'Xiaofang [innocent lively female voice]','xiaoai':'Xiaoai [sincere friendly female voice]','nainai':'Nainai [natural genuine female voice]','chengmiao':'Chengmiao [brisk spirited female voice]','zhengcheng':'Zhengcheng [soft firm male voice]','zili':'Zili [quiet refined male voice]','ningning':'Ningning [warm gentle male voice]','zhentian':'Zhentian [open easygoing male voice]','bufan':'Bufan [magnetic rich male voice]','wenxi':'Wenxi [sunny natural male voice]','tiantian':'Tiantian [steady deep male voice]','lingyu':'Lingyu [mild polished male voice]','wusong':'Wusong [bright serious male voice]','kunde':'Kunde [deep steady male voice]','jinyan':'Jinyan [clear precise male voice]','shenzhi':'Shenzhi [tense pressing male voice]','ruyan':'Ruyan [serious formal male voice]','jianming':'Jianming [fantasy novel]','yuzhang':'Yuzhang [fantasy novel]','chuanqi':'Chuanqi [game novel]','lingmeng':'Lingmeng [romance novel]','shenghun':'Shenghun [fantasy novel]','yizhou':'Yizhou [urban novel]','youlan':'Youlan [romance novel]','hongmang':'Hongmang [fantasy novel]','youran':'Youran [fantasy novel]','shanyu':'Shanyu [fantasy novel]','mengjing':'Mengjing [urban novel]','yunsong':'Yunsong [fantasy novel]','haohan':'Haohan [urban novel]','linger':'Linger [childlike female voice]','yaoyao':'Yaoyao [childlike male voice]','subo':'Subo [news male voice]','mina':'Mina [news female voice]','linghui':'Linghui [news female voice]','lingyin':'Lingyin [news female voice]','shuangshuang':'Shuangshuang [news male voice]','jeff':'Jeff [English news]','rose':'Rose [English novel]','julia':'Julia [English novel]','jack':'Jack [English novel]','liangshu':'Liangshu [celebrity voice]','xiaosong':'Xiaosong [celebrity voice]','laoyi':'Laoyi [celebrity voice]','dafei':'Dafei [celebrity voice]','shishen':'Shishen [celebrity voice]','wansheng':'Wansheng [celebrity voice]','kaige':'Kaige [celebrity voice]','guobao':'Guobao [celebrity voice]','jiange':'Jiange [celebrity voice]'}
                     }
                 },
             
@@ -101,7 +101,7 @@ class TtsPluginEngineTest {
 
 
 //        tte.getAudio(
-//            text = "君不见黄河之水天上来，奔流到海不复回。",
+//            text = "The river falls from the sky and rushes to the sea.",
 //            locale = "zh-CN",
 //            voice = "test-li-bai",
 //            rate = 1.2f,
@@ -127,7 +127,7 @@ class TtsPluginEngineTest {
                 console.log("onLoad")
             },
             
-            // 无 getAudio() 时调用
+            // Called when getAudio() is absent
             'getAudioV2': function(request, callback){
                 console.log(request)    
             },

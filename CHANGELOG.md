@@ -1,10 +1,10 @@
-- 有好的配置导入提示
-- 添加三种主题色
-- 新用户自动添加默认配置
-- 添加帮助文档，并自动显示
-- 朗读规则支持单条导出
-- 支持由调用者通过API指定发音配置
-- 修复朗读规则导出无拓展名
-- 修复本地TTS无法在编辑界面试听
-- 修复插件TTS附加数据不更新（解决Azure插件风格和角色变化问题）
-- 修复Android8及以下版本的备份问题
+- Friendlier prompt when importing a configuration
+- Add three theme colors
+- Automatically add a default configuration for new users
+- Add help documentation and show it automatically
+- Read-aloud rules support exporting a single entry
+- Allow the caller to specify the voice configuration through the API
+- Fix read-aloud rule export missing a file extension
+- Fix local TTS preview not working on the edit screen
+- Fix plugin TTS extra data not updating (fixes Azure plugin style and role changes)
+- Fix backup on Android 8 and earlier

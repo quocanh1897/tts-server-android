@@ -17,7 +17,7 @@ data class PluginTTS(
     val pluginId: String = "",
     override var locale: String = "",
     var voice: String = "",
-    // 插件附加数据
+    // Extra plugin data
     var data: MutableMap<String, String> = mutableMapOf(),
 
     override var pitch: Int = 50,

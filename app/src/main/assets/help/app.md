@@ -1,52 +1,51 @@
 version-2
 
-[![Q群](https://img.shields.io/badge/Q%E7%BE%A4-124841768-blue.svg)](https://jq.qq.com/?_wv=1027&k=y7WCDjEA) 
+[![QQ group](https://img.shields.io/badge/QQ-124841768-blue.svg)](https://jq.qq.com/?_wv=1027&k=y7WCDjEA)
 [![Issue](https://img.shields.io/badge/Github-Issue-greeb.svg)](https://github.com/jing332/tts-server-android/issues)
-[![Dev](https://img.shields.io/github/actions/workflow/status/jing332/tts-server-android/test.yml?label=%E5%BC%80%E5%8F%91%E7%89%88)](https://github.com/jing332/tts-server-android/actions/workflows/test.yml)
+[![Dev](https://img.shields.io/github/actions/workflow/status/jing332/tts-server-android/test.yml?label=Dev)](https://github.com/jing332/tts-server-android/actions/workflows/test.yml)
 
-# TTS Server 
-本APP不提供语音合成服务，只是个网络TTS的搬运工，
-通过插件驱动调用网络上的TTS接口。
+# TTS Server
+This app does not host text-to-speech. It forwards network TTS through plugins that call TTS APIs on the internet.
 
 
-##  1️⃣ 系统TTS
-以下4个界面，在右上角更多选项中都有独立的导入、导出功能。您还可在设置中进行全部备份、恢复等操作。 
+## 1. System TTS
+The four screens below each have their own import and export actions in the More options menu at the top right. You can also back up and restore everything in Settings.
 
-### 主界面
-配置列表，用于管理TTS配置，您可使用分组功能进行一键切换多个配置。
-- 可在设置中调换 `编辑`与`试听` 按钮的位置 ( <i>长按编辑按钮进行试听，反之，长按试听按钮进行编辑</i> )
+### Main list
+A list of TTS configs. You can use groups to switch several configs at once.
+- In Settings you can swap the `Edit` and `Preview` buttons. ( <i>Long-press Edit to preview, and long-press Preview to edit.</i> )
 
-### 朗读规则
-用于处理朗读文本，根据用户配置的标签进行匹配TTS配置（如：旁白/对话）。
-程序已内置 基于中文的双引号的 `旁白对话` 朗读规则，您可直接进行使用。
+### Speech rules
+Speech rules process the text to read and match a TTS config by the tags you set (for example, narration and dialogue).
+The app includes a built-in `Narration/Dialogue` speech rule based on Chinese quotation marks. You can use it as-is.
 
-### 插件
-用于扩展TTS功能，使用JS脚本进行调用互联网的上的TTS接口，如：内置的`Azure插件`。
+### Plugins
+Plugins extend TTS. A JavaScript plugin calls a TTS API on the internet, for example the built-in `Azure` plugin.
 
-### 替换规则
-用于替换朗读文本进行纠正发音等操作，如：将“你好”替换为“您好”
+### Replace rules
+Replace rules rewrite the text before it is read, for example to correct pronunciation: replace "hello" with "hi".
 
-高级示例：
-- 将字数5以内的对话的双引号替换为【】，以达到旁白朗读的目的。
+Advanced example:
+- Replace the quotation marks around dialogue of 5 characters or fewer with brackets, so it is read as narration.
 ```
-(启用正则表达式)
-替换规则：(“)(.{1,5})(”)
-替换为：【$2】
+(Enable regular expressions)
+Replace rule: (")(.{1,5})(")
+Replace with: [$2]
 ```
 
-## 👨‍🏫 系统TTS 常见问题 
-### 1. 锁屏后一段时间朗读突然停止？
-> 在 `系统设置->应用->电池优化` 中将本APP与阅读APP加入电池优化白名单。
-> 
-> 对于本APP，您可在左侧滑菜单中单击 `电池优化白名单` 进行快捷设置。
-> 
-> PS: 对于国内系统，您可能还需对后台任务上锁，启用后台权限等操作。
+## System TTS FAQ
+### 1. Playback stops a while after the screen turns off?
+> Add this app and your reader app to the battery optimization whitelist in `System settings -> Apps -> Battery optimization`.
+>
+> For this app, open the navigation drawer and tap `Battery optimization whitelist`.
+>
+> PS: On some phone systems you may also need to lock the background task and allow background activity.
 
-### 2. 段落间隔时间长？
-> 一般是由于网络延迟原因，因为 安卓系统TTS 服务的技术限制，导致无法预缓存音频，故每次只能同步获取。
+### 2. Long gaps between paragraphs?
+> This is usually network delay. Android system TTS cannot precache audio, so each request has to be fetched synchronously.
 
 
 
-## 2️⃣ TTS转发器
-用于将安卓系统TTS转为HTTP网络接口形式，便于在网页调用。  
-**配合阅读APP的网络TTS引擎调用，可变相实现预缓存一章的音频，提高段落间流畅度。**
+## 2. TTS forwarder
+Exposes Android system TTS as an HTTP API so a reader app can call it.
+**Used with a reader app's network TTS engine, it can precache a chapter of audio and smooth out the gaps between paragraphs.**

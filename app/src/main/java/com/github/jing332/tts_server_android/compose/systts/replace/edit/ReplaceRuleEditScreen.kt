@@ -236,7 +236,7 @@ private object InputFieldID {
 }
 
 /**
- * 插入文本到当前光标前方
+ * Insert text in front of the current cursor
  */
 fun TextFieldValue.newValueOfInsertText(
     text: String, cursorPosition: Int = selection.end,
@@ -432,33 +432,33 @@ private fun PinyinDialog(onDismissRequest: () -> Unit, onInput: (text: String) -
     val pinyinList = remember {
         listOf(
             listOf(
-                "ā-a-1声",
-                "á-a-2声",
-                "ǎ-a-3声",
-                "à-a-4声",
+                "\u0101-a-tone1",
+                "\u00e1-a-tone2",
+                "\u01ce-a-tone3",
+                "\u00e0-a-tone4",
             ), listOf(
-                "ê-e-?声",
-                "ē-e-1声",
-                "é-e-2声",
-                "ě-e-3声",
-                "è-e-4声",
+                "\u00ea-e-tone?",
+                "\u0113-e-tone1",
+                "\u00e9-e-tone2",
+                "\u011b-e-tone3",
+                "\u00e8-e-tone4",
             ), listOf(
-                "ī-i-1声",
-                "í-i-2声",
-                "ǐ-i-3声",
-                "ì-i-4声",
+                "\u012b-i-tone1",
+                "\u00ed-i-tone2",
+                "\u01d0-i-tone3",
+                "\u00ec-i-tone4",
             ), listOf(
-                "ō-o-1声",
-                "ó-o-2声",
-                "ǒ-o-3声",
-                "ò-o-4声",
+                "\u014d-o-tone1",
+                "\u00f3-o-tone2",
+                "\u01d2-o-tone3",
+                "\u00f2-o-tone4",
             ), listOf(
-                "ū-u-1声",
-                "ú-u-2声",
-                "ǔ-u-3声",
-                "ù-u-4声",
+                "\u016b-u-tone1",
+                "\u00fa-u-tone2",
+                "\u01d4-u-tone3",
+                "\u00f9-u-tone4",
             ), listOf(
-                "ǖ-v-1声", "ǘ-v-2声", "ǚ-v-3声", "ǜ-v-4声"
+                "\u01d6-v-tone1", "\u01d8-v-tone2", "\u01da-v-tone3", "\u01dc-v-tone4"
             )
         )
     }

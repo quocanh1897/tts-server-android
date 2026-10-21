@@ -5,13 +5,13 @@ import com.github.jing332.database.constants.ReplaceExecution.ReplaceExecution.A
 import com.github.jing332.database.constants.ReplaceExecution.ReplaceExecution.BEFORE
 
 /**
- * 替换规则执行时机
+ * When a replace rule runs
  */
 @IntDef(BEFORE, AFTER)
 @Retention(AnnotationRetention.SOURCE)
 annotation class ReplaceExecution {
     companion object ReplaceExecution {
-        const val BEFORE = 0 // 朗读规则前
-        const val AFTER = 1 // 朗读规则后
+        const val BEFORE = 0 // Before the speech rule
+        const val AFTER = 1 // After the speech rule
     }
 }

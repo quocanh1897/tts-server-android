@@ -11,7 +11,7 @@ import java.nio.ByteBuffer
 
 @UnstableApi
 /**
- * 用于接收从 ExoPlayer 解码后的 PCM 数据，而不是播放到 AudioTrack。
+ * Receives PCM decoded by ExoPlayer instead of playing it to an AudioTrack.
  */
 class DecoderAudioSink(
     private val onPcmBuffer: (ByteBuffer) -> Unit,
@@ -27,7 +27,7 @@ class DecoderAudioSink(
     }
 
     override fun supportsFormat(format: Format): Boolean {
-        return format.sampleMimeType == "audio/raw" // 只接收 PCM 格式
+        return format.sampleMimeType == "audio/raw" // Accept PCM only
     }
 
     override fun getFormatSupport(format: Format): Int = SINK_FORMAT_SUPPORTED_WITH_TRANSCODING

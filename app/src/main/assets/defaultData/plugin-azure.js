@@ -1,12 +1,11 @@
-// 请点击保存后在 更多选项按钮(垂直三个点) -> 设置变量 中设置密钥和区域
 // Please set the key and region in "More options" -> "Variables" after clicking save.
 
 let key = ttsrv.userVars['key'] || 'Default_KEY'
 let region = ttsrv.userVars['region'] || 'eastus'
 
 let format = "audio-24khz-48kbitrate-mono-mp3"
-let sampleRate = 24000 // 对应24khz. 格式后带有opus的实际采样率是其2倍
-let isNeedDecode = true // 是否需要解码，如 format 为 raw 请设为 false
+let sampleRate = 24000 // Matches 24 kHz. A format that includes opus uses twice this sample rate.
+let isNeedDecode = true // Whether decoding is required. Set to false when format is raw.
 
 let PluginJS = {
     "name": "Azure",
@@ -14,9 +13,9 @@ let PluginJS = {
     "author": "TTS Server",
     "description": "",
     "version": 3,
-    "vars": { // 声明变量，再由用户设置。
-        key: {label: "密钥 Key"},
-        region: {label: "区域 Region", hint: "为空时使用默认'eastus'"},
+    "vars": { // Variables declared here are set by the user.
+        key: {label: "Key"},
+        region: {label: "Region", hint: "Uses 'eastus' when empty"},
     },
 
     "onLoad": function () {
@@ -71,7 +70,7 @@ function checkKeyRegion() {
     key = (key + '').trim()
     region = (region + '').trim()
     if (key === '' || region === '') {
-        throw "请设置变量: 密钥Key与区域Region。 Please set the key and region."
+        throw "Please set the key and region."
     }
 }
 
@@ -86,23 +85,23 @@ function getAudioInternal(ssml, format) {
     let resp = ttsrv.httpPost(ttsUrl, ssml, headers)
     if (resp.code() !== 200) {
         if (resp.code() === 401) {
-            throw "401 Unauthorized 未授权，请检查密钥与区域是否正确。"
+            throw "401 Unauthorized. Check that the key and region are correct."
         }else if (resp.code() === 403) {
-            throw "403 Forbidden 被禁止，您的Azure账户可能已被禁用。"
+            throw "403 Forbidden. Your Azure account may be disabled."
         }
 
-        throw "音频获取失败: HTTP-" + resp.code()
+        throw "Failed to get audio: HTTP-" + resp.code()
     }
 
     return resp.body().byteStream()
 }
 
-// 全部voice数据
+// All voice data
 let voices = {}
-// 当前语言下的voice
+// Voices for the current locale
 let currentVoices = new Map()
 
-// 语言技能 二级语言
+// Language skill (secondary locale)
 let skillSpinner
 
 let styleSpinner
@@ -110,7 +109,7 @@ let roleSpinner
 let seekStyle
 
 let EditorJS = {
-    //音频的采样率 编辑TTS界面保存时调用
+    // Audio sample rate. Called when the TTS editor is saved.
     "getAudioSampleRate": function (locale, voice) {
         return sampleRate
     },
@@ -132,7 +131,7 @@ let EditorJS = {
         return locales
     },
 
-    // 当语言变更时调用
+    // Called when the locale changes.
     "getVoices": function (locale) {
         currentVoices = new Map()
         voices.forEach(function (v) {
@@ -148,9 +147,9 @@ let EditorJS = {
         return mm
     },
 
-    // 加载本地或网络数据，运行在IO线程。
+    // Load local or network data. Runs on an IO thread.
     "onLoadData": function () {
-        // 获取数据并缓存以便复用
+        // Fetch the data and cache it for reuse.
         let jsonStr = ''
         if (ttsrv.fileExist('voices.json')) {
             jsonStr = ttsrv.readTxtFile('voices.json')
@@ -172,31 +171,31 @@ let EditorJS = {
 
     "onLoadUI": function (ctx, linerLayout) {
         let layout = new LinearLayout(ctx)
-        layout.orientation = LinearLayout.HORIZONTAL // 水平布局
+        layout.orientation = LinearLayout.HORIZONTAL // Horizontal layout
         let params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1)
 
-        skillSpinner = JSpinner(ctx, "语言技能 (language skill)")
+        skillSpinner = JSpinner(ctx, "Language skill")
         linerLayout.addView(skillSpinner)
         ttsrv.setMargins(skillSpinner, 2, 4, 0, 0)
         skillSpinner.setOnItemSelected(function (spinner, pos, item) {
             ttsrv.tts.data['languageSkill'] = item.value + ''
         })
 
-        styleSpinner = JSpinner(ctx, "风格 (style)")
+        styleSpinner = JSpinner(ctx, "Style")
         styleSpinner.layoutParams = params
         layout.addView(styleSpinner)
         ttsrv.setMargins(styleSpinner, 2, 4, 0, 0)
         styleSpinner.setOnItemSelected(function (spinner, pos, item) {
             ttsrv.tts.data['style'] = item.value
-            // 默认 || value为空 || value空字符串
+            // Default, empty value, or empty string
             if (pos === 0 || !item.value || item.value === "") {
-                seekStyle.visibility = View.GONE // 移除风格强度
+                seekStyle.visibility = View.GONE // Hide style degree
             } else {
-                seekStyle.visibility = View.VISIBLE // 显示
+                seekStyle.visibility = View.VISIBLE // Show
             }
         })
 
-        roleSpinner = JSpinner(ctx, "角色 (role)")
+        roleSpinner = JSpinner(ctx, "Role")
         roleSpinner.layoutParams = params
         layout.addView(roleSpinner)
         ttsrv.setMargins(roleSpinner, 0, 4, 2, 0)
@@ -205,11 +204,11 @@ let EditorJS = {
         })
         linerLayout.addView(layout)
 
-        seekStyle = JSeekBar(ctx, "风格强度 (Style degree)：")
+        seekStyle = JSeekBar(ctx, "Style degree:")
         linerLayout.addView(seekStyle)
         ttsrv.setMargins(seekStyle, 0, 4, 0, -4)
-        seekStyle.setFloatType(2) // 二位小数
-        seekStyle.max = 200 //最大200个刻度
+        seekStyle.setFloatType(2) // Two decimal places
+        seekStyle.max = 200 // Maximum of 200 steps
 
         let styleDegree = Number(ttsrv.tts.data['styleDegree'])
         if (!styleDegree || isNaN(styleDegree)) {
@@ -219,15 +218,15 @@ let EditorJS = {
 
         seekStyle.setOnChangeListener(
             {
-                // 开始时
+                // On start
                 onStartTrackingTouch: function (seek) {
 
                 },
-                // 进度滑动更改时
+                // While the progress changes
                 onProgressChanged: function (seek, progress, fromUser) {
 
                 },
-                // 停止时
+                // On stop
                 onStopTrackingTouch: function (seek) {
                     ttsrv.tts.data['styleDegree'] = Number(seek.value).toFixed(2)
                 },
@@ -243,7 +242,7 @@ let EditorJS = {
         let locale2Pos = 0
 
         if (locale2List) {
-            locale2Items.push(Item("默认 (default)", ""))
+            locale2Items.push(Item("Default", ""))
             locale2List.map(function (v, i) {
                 let loc = java.util.Locale.forLanguageTag(v)
                 let name = loc.getDisplayName(loc)
@@ -266,11 +265,11 @@ let EditorJS = {
         let styleItems = []
         let stylePos = 0
         if (styles) {
-            styleItems.push(Item("默认 (general)", ""))
+            styleItems.push(Item("Default", ""))
             styles.map(function (v, i) {
                 styleItems.push(Item(getString(v), v))
                 if (v === ttsrv.tts.data['style'] + '') {
-                    stylePos = i + 1 //算上默认的item 所以要 +1
+                    stylePos = i + 1 // Include the default item, so add 1
                 }
             })
         } else {
@@ -283,11 +282,11 @@ let EditorJS = {
         let roleItems = []
         let rolePos = 0
         if (roles) {
-            roleItems.push(Item("默认 (default)", ""))
+            roleItems.push(Item("Default", ""))
             roles.map(function (v, i) {
                 roleItems.push(Item(getString(v), v))
                 if (v === ttsrv.tts.data['role'] + '') {
-                    rolePos = i + 1 //算上默认的item 所以要 +1
+                    rolePos = i + 1 // Include the default item, so add 1
                 }
             })
         }
@@ -297,50 +296,50 @@ let EditorJS = {
 }
 
 let cnLocales = {
-    "narrator": "旁白",
-    "girl": "女孩",
-    "boy": "男孩",
-    "youngadultfemale": "年轻女性",
-    "youngadultmale": "年轻男性",
-    "olderadultfemale": "年长女性",
-    "olderadultmale": "年长男性",
-    "seniorfemale": "年老女性",
-    "seniormale": "年老男性",
+    "narrator": "Narration",
+    "girl": "Girl",
+    "boy": "Boy",
+    "youngadultfemale": "Young woman",
+    "youngadultmale": "Young man",
+    "olderadultfemale": "Older woman",
+    "olderadultmale": "Older man",
+    "seniorfemale": "Senior woman",
+    "seniormale": "Senior man",
 
-    "advertisement_upbeat": "广告推销",
-    "affectionate": "亲切",
-    "angry": "生气",
-    "assistant": "数字助理",
-    "calm": "平静",
-    "chat": "闲聊",
-    "cheerful": "愉快",
-    "customerservice": "客户服务",
-    "depressed": "沮丧",
-    "disgruntled": "不满",
-    "documentary-narration": "纪录片",
-    "embarrassed": "尴尬",
-    "empathetic": "同情",
-    "envious": "嫉妒",
-    "excited": "兴奋",
-    "fearful": "恐惧",
-    "friendly": "友好",
-    "gentle": "温柔",
-    "hopeful": "希望",
-    "lyrical": "抒情",
-    "narration-professional": "专业",
-    "narration-relaxed": "轻松",
-    "newscast": "新闻",
-    "newscast-casual": "新闻-休闲",
-    "newscast-formal": "新闻-正式",
-    "poetry-reading": "诗歌朗诵",
-    "sad": "悲伤",
-    "serious": "严肃",
-    "shouting": "喊叫",
-    "sports_commentary": "体育",
-    "sports_commentary_excited": "体育-兴奋",
-    "whispering": "耳语",
-    "terrified": "恐惧",
-    "unfriendly": "不友好",
+    "advertisement_upbeat": "Advertisement",
+    "affectionate": "Affectionate",
+    "angry": "Angry",
+    "assistant": "Assistant",
+    "calm": "Calm",
+    "chat": "Chat",
+    "cheerful": "Cheerful",
+    "customerservice": "Customer service",
+    "depressed": "Depressed",
+    "disgruntled": "Disgruntled",
+    "documentary-narration": "Documentary",
+    "embarrassed": "Embarrassed",
+    "empathetic": "Empathetic",
+    "envious": "Envious",
+    "excited": "Excited",
+    "fearful": "Fearful",
+    "friendly": "Friendly",
+    "gentle": "Gentle",
+    "hopeful": "Hopeful",
+    "lyrical": "Lyrical",
+    "narration-professional": "Professional",
+    "narration-relaxed": "Relaxed",
+    "newscast": "Newscast",
+    "newscast-casual": "Newscast casual",
+    "newscast-formal": "Newscast formal",
+    "poetry-reading": "Poetry",
+    "sad": "Sad",
+    "serious": "Serious",
+    "shouting": "Shouting",
+    "sports_commentary": "Sports",
+    "sports_commentary_excited": "Sports excited",
+    "whispering": "Whisper",
+    "terrified": "Terrified",
+    "unfriendly": "Unfriendly",
 }
 
 let isZh = java.util.Locale.getDefault().getLanguage() == 'zh'

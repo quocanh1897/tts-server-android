@@ -8,28 +8,28 @@ import kotlin.math.ln
 import kotlin.math.pow
 
 object StringUtils {
-    const val WARNING_EMOJI = """⚠️"""
+    const val WARNING_EMOJI = "Warning:"
 
     private val silentPattern by lazy { Pattern.compile("[\\s\\p{C}\\p{P}\\p{Z}\\p{S}]") }
-    private val splitSentencesRegex by lazy { Pattern.compile("[。？?！!;；]") }
+    private val splitSentencesRegex by lazy { Pattern.compile("[\u3002\uFF1F?\uFF01!;\uFF1B]") }
 
     fun formattedDate(): String =
         SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
 
     /**
-     *  是否为不发音的字符串
+     *  Whether the string is silent
      */
     fun isSilent(s: String): Boolean {
         return silentPattern.matcher(s).replaceAll("").isEmpty()
     }
 
     /**
-     * 分割长句并保留分隔符
+     * Split long sentences and keep separators
      */
     fun splitSentences(s: String): List<String> {
         val m = splitSentencesRegex.matcher(s)
         val list = splitSentencesRegex.split(s)
-        //保留分隔符
+        // keep the separator
         if (list.isNotEmpty()) {
             var count = 0
             while (count < list.size) {
@@ -40,11 +40,11 @@ object StringUtils {
             }
         }
 
-        return list.filter { it.replace("”", "").isNotBlank() }
+        return list.filter { it.replace("\u201d", "").isNotBlank() }
     }
 
     /**
-     * 限制字符串长度
+     * Limit string length
      */
     fun String.limitLength(maxLength: Int = 20, suffix: String = ""): String {
         return if (length >= maxLength)
@@ -55,7 +55,7 @@ object StringUtils {
 }
 
 /**
- * json字符串头尾加[ ]
+ * Wrap json with brackets
  */
 fun String.toJsonListString(): String {
     var s = this.trim().removeSuffix(",")
@@ -66,7 +66,7 @@ fun String.toJsonListString(): String {
 
 
 /**
- * 字符串中汉字数量
+ * Count of Han characters
  */
 fun String.lengthOfChinese(): Int {
     var count = 0
@@ -79,7 +79,7 @@ fun String.lengthOfChinese(): Int {
 }
 
 /**
- * 转为html粗体标签
+ * Convert to html bold
  */
 fun String.toHtmlBold(): String {
     return "<b>$this</b>"

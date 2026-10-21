@@ -37,9 +37,9 @@ android {
             arg("room.expandProjection", "true")
         }
 
-        // 读取strings.xml所在文件夹 获得应用支持的语言
+        // Read the strings.xml folders to discover supported app languages
         tasks.register('buildTranslationArray') {
-            def defaultCode = "zh-CN"
+            def defaultCode = "en"
             def foundLocales = new StringBuilder()
             foundLocales.append("new String[]{")
 
@@ -99,7 +99,7 @@ android {
     }
 
 
-    // 分别打包APK 原版 和 dev共存版
+    // Package the release APK and the side-by-side dev APK separately
     flavorDimensions += "version"
     productFlavors {
         app {
